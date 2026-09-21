@@ -154,34 +154,45 @@
         .btn-login:active {
             transform: translateY(0);
         }
+
+        /* สไตล์แจ้งเตือนกรณีรหัสผ่านผิด */
+        .error-message {
+            color: #ef4444;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="login-card">
         <h2>Login</h2>
-        <form action="check_login.php" method="post">
+        
+        <div id="errorMessage" class="error-message">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+
+        <form id="loginForm" onsubmit="handleMockLogin(event)">
             <div class="input-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required placeholder="กรอกชื่อผู้ใช้" autocomplete="username">
+                <input type="text" id="username" name="username" required placeholder="กรอกชื่อผู้ใช้ (เช่น admin)" autocomplete="username">
             </div>
             
             <div class="input-group">
                 <label for="password">Password</label>
                 <div class="input-wrapper">
-                    <input type="password" id="password" name="password" required placeholder="กรอกรหัสผ่าน" autocomplete="current-password">
+                    <input type="password" id="password" name="password" required placeholder="กรอกรหัสผ่าน (เช่น 1234)" autocomplete="current-password">
                     <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">แสดง</button>
                 </div>
             </div>
 
             <div class="form-options">
-                <a href="#" class="forgot-pass">ลืมรหัสผ่าน?</a>
+                <a href="#" class="forgot-pass" onclick="alert('ระบบสมมติ: ติดต่อผู้ดูแลระบบเพื่อรีเซ็ตรหัสผ่าน')">ลืมรหัสผ่าน?</a>
             </div>
 
             <button type="submit" class="btn-login">เข้าสู่ระบบ</button>
         </form>
     </div>
 
-    <!-- Script ช่วยเปิด/ปิดการมองเห็นรหัสผ่าน -->
     <script>
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
@@ -193,6 +204,22 @@
             } else {
                 passwordInput.type = 'password';
                 toggleBtn.textContent = 'แสดง';
+            }
+        }
+
+        function handleMockLogin(event) {
+            event.preventDefault(); // ป้องกันการ reload หน้าจอ
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMessage');
+
+            // กำหนด User/Pass สมมติ หรือให้พิมพ์อะไรก็ได้เข้าได้หมด
+            if (username.trim() !== "" && password.trim() !== "") {
+                alert('เข้าสู่ระบบสำเร็จ! (Mock Login)');
+                window.location.href = 'index.php'; // เปลี่ยนไปยังหน้าปลายทางที่ต้องการ
+            } else {
+                errorMsg.style.display = 'block';
             }
         }
     </script>
